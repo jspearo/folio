@@ -9,10 +9,20 @@ Skill pre subagent `email-collector`. Pravidla pre vyber a stahovanie priloh.
 
 ## IMAP search query patterns
 
-Pre IMAP search pouzit kombinaciu casoveho a textoveho filtra:
+Pre IMAP search pouzit kombinaciu casoveho a textoveho filtra.
+
+### Dátumové okno
+
+Faktúry za daný účtovný mesiac často **chodia neskôr** — dodávatelia ich vystavujú
+v prvej polovici nasledujúceho mesiaca. Preto okno **nie je** presne 1 kalendárny
+mesiac, ale:
+
+- **SINCE** = 1. deň účtovného mesiaca
+- **BEFORE** = 15. deň **nasledujúceho** mesiaca (BEFORE je exklúzívne → posledný
+  zachytený deň je 14.)
 
 ```
-SINCE <prvy-den-mesiaca> BEFORE <prvy-den-nasledujuceho-mesiaca>
+SINCE <prvy-den-mesiaca> BEFORE <15-nasledujuceho-mesiaca>
   AND (
     SUBJECT "faktúra" OR SUBJECT "faktura" OR
     SUBJECT "invoice" OR SUBJECT "daňový doklad" OR
@@ -23,8 +33,14 @@ SINCE <prvy-den-mesiaca> BEFORE <prvy-den-nasledujuceho-mesiaca>
 
 Priklad pre april 2026:
 ```
-SINCE 1-Apr-2026 BEFORE 1-May-2026 SUBJECT "faktúra"
+SINCE 1-Apr-2026 BEFORE 15-May-2026 SUBJECT "faktúra"
 ```
+
+Pri spracovaní dvoch po sebe idúcich mesiacov sa okná **prekrývajú** (1.-14. máj
+je v okne aprila aj v okne mája). Dedupe podľa `Message-ID` zabráni dvojitému
+stiahnutiu, ale dokument môže byť priradený k zlému mesiacu ak ide podľa dátumu
+prijatia emailu — `document-renamer` premenováva podľa **dátumu dodania z faktúry**,
+takže reálne sa zaradí podľa DUZP. Folder kam sa stiahne určuje `--out` parameter.
 
 ### Foldre, ktore treba prejst
 

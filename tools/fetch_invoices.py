@@ -68,12 +68,19 @@ def decode_field(s):
 
 
 def month_range(yyyy_mm):
+    """Search window for invoices.
+
+    Invoices for an accounting month often arrive late — vendors typically
+    issue them in the first half of the following month. Window goes from
+    1st of target month to 15th of the next month (inclusive of the 14th).
+    IMAP BEFORE is exclusive, so we pass day 15.
+    """
     y, m = map(int, yyyy_mm.split("-"))
     first = date(y, m, 1)
     if m == 12:
-        last = date(y + 1, 1, 1)
+        last = date(y + 1, 1, 15)
     else:
-        last = date(y, m + 1, 1)
+        last = date(y, m + 1, 15)
     return imap_date(first), imap_date(last)
 
 
