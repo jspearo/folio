@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Bash(7z:*)",
+      "Bash(7z.exe:*)",
+      "Bash(qpdf:*)",
+      "Bash(qpdf.exe:*)",
+      "Bash(ls:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(test:*)",
+      "Bash(python tools/:*)",
+      "Bash(python3 tools/:*)",
+      "Bash(py tools/:*)",
+      "mcp__filesystem__*"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(git push:*)"
+    ]
+  },
+  "env": {
+    "ACC_WORK_DIR": "./vystup",
+    "ACC_DROP_DIR": "${ACCOUNTANT_DROP}",
+    "ACC_ZIP_PASSWORD": "${ACC_ZIP_PASSWORD}"
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "./vystup",
+        "./config"
+      ]
+    }
+  }
+}

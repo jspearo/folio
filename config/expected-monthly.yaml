@@ -1,0 +1,83 @@
+# Zoznam pravidelnych dokladov ocakavanych kazdy mesiac (alebo zriedkavejsie).
+# Edituj podla skutocnych dodavatelov tvojej firmy.
+#
+# frequency: monthly | quarterly | yearly | irregular
+# months (iba pre quarterly/yearly): cisla mesiacov 1-12 kedy ocakavame
+# aliases (volitelne): alternativne slug-y pre matching
+
+vendors:
+  # === Telco ===
+  - slug: orange-slovensko
+    name: "Orange Slovensko, a.s."
+    frequency: monthly
+    category: telco
+
+  - slug: o2-slovakia
+    name: "O2 Slovakia, s.r.o."
+    frequency: monthly
+    category: telco
+    aliases: [o2]
+
+  - slug: slovak-telekom
+    name: "Slovak Telekom, a.s."
+    frequency: monthly
+    category: telco
+    aliases: [telekom]
+
+  # === Hosting / IT ===
+  - slug: webglobe-yegon
+    name: "Webglobe – Yegon, s.r.o."
+    frequency: monthly
+    category: hosting
+    aliases: [webglobe]
+
+  - slug: microsoft-ireland-operations
+    name: "Microsoft Ireland Operations Limited"
+    frequency: monthly
+    category: software
+    aliases: [microsoft, ms-365, microsoft-365]
+
+  - slug: google-cloud-emea
+    name: "Google Cloud EMEA Limited"
+    frequency: monthly
+    category: software
+    aliases: [google, google-workspace]
+
+  # === Energie ===
+  - slug: zsdis
+    name: "Západoslovenská distribučná, a.s."
+    frequency: monthly
+    category: energy
+
+  - slug: zse-energia
+    name: "ZSE Energia, a.s."
+    frequency: monthly
+    category: energy
+    aliases: [zse]
+
+  - slug: spp
+    name: "Slovenský plynárenský priemysel, a.s."
+    frequency: quarterly
+    months: [3, 6, 9, 12]
+    category: gas
+
+  # === Najom ===
+  - slug: prenajom-priestorov
+    name: "Prenajom kancelarskych priestorov"
+    frequency: monthly
+    category: rent
+    aliases: [prenajom, najomne]
+
+  # === Rocne predplatne ===
+  - slug: nay-elektronika
+    name: "NAY, a.s."
+    frequency: yearly
+    months: [1]
+    category: it-hardware
+    aliases: [nay]
+
+  # === Nepravidelne (informativne, missing nie je chyba) ===
+  - slug: revizia-vytahu
+    name: "Revizia vytahu / BOZP"
+    frequency: irregular
+    category: maintenance
