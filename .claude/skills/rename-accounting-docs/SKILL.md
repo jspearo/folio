@@ -135,3 +135,24 @@ V `_renamer.log.json` oznac kazdy dokument:
 | Bloček z casino/parkovania | `20260418-shell.jpg` (vendor = retail brand) |
 | Tankovanie | `20260420-omv.pdf` |
 | Restauracia (reprezentacne) | `20260415-hotel-tatra.pdf` |
+
+## Cerpacie stanice / pohonne hmoty
+
+- Doklad z cerpacej stanice pomenuj podla ZNACKY, nie podla prevadzkovatela:
+  - `Janosik - NEA, s.r.o.`, `BEDYMAR, s.r.o.`, `HSV s.r.o.` = **Shell** -> slug `shell`
+  - `OMV` -> `omv`, `Slovnaft` -> `slovnaft`
+- **Shell Bernolakovo** (prevadzkovatel `J&J Property Invest, s.r.o.`, Senecka cesta 3231,
+  90027 Bernolakovo; predava V-P Diesel): na koniec nazvu pridaj `-discovery`
+  -> `YYYYMMDD-shell-discovery.<ext>`
+
+## Bankove vypisy (vypis z uctu)
+
+- Bankovy vypis (napr. Tatra banka) je **doklad** -> patri medzi doklady (nie do `_ignored/`).
+- Pomenovanie: **`YYYYMM-vypisy.pdf`** (iba rok+mesiac, bez dna), kde `YYYYMM` je
+  obdobie, ZA ktore vypis je.
+- Mesiac urci podla datumu dorucenia / datumu vypisu:
+  - prisiel **posledny den v mesiaci** -> je za **dany** mesiac,
+  - prisiel **na zaciatku mesiaca** -> je za **predchadzajuci** mesiac.
+- Vypisy chodia **sifrovane**: desifruj cez `pypdf` s heslom z env `BANK_PDF_PASSWORD`
+  (qpdf nie je nutny) a uloz citatelne PDF medzi doklady.
+- Viac uctov v rovnakom mesiaci -> kolizia: priloz `-2`, `-3`, ...

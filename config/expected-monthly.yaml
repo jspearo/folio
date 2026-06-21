@@ -3,15 +3,11 @@
 #
 # frequency: monthly | quarterly | yearly | irregular
 # months (iba pre quarterly/yearly): cisla mesiacov 1-12 kedy ocakavame
-# aliases (volitelne): alternativne slug-y pre matching
+# aliases (volitelne): alternativne slug-y pre matching (vendor sa moze na
+#   doklade volat inak, napr. prevadzkovatel cerpacej stanice namiesto znacky)
 
 vendors:
-  # === Telco ===
-  - slug: orange-slovensko
-    name: "Orange Slovensko, a.s."
-    frequency: monthly
-    category: telco
-
+  # === Telco (mesacne) ===
   - slug: o2-slovakia
     name: "O2 Slovakia, s.r.o."
     frequency: monthly
@@ -24,60 +20,35 @@ vendors:
     category: telco
     aliases: [telekom]
 
-  # === Hosting / IT ===
+  # === Banka (mesacny vypis z uctu) ===
+  - slug: tatra-banka
+    name: "Tatra banka, a.s."
+    frequency: monthly
+    category: bank
+    aliases: [tatrabanka, tatra, vypis]
+    # Pozn.: vypis z uctu sa stahuje do vystup/<mesiac>/_bank/raw/ ako
+    # sifrovane PDF; nazov suboru je cislo uctu, nie "tatra", takze
+    # matching cez slug v hlavnom foldri nezabera -> pritomnost vypisu
+    # over vo _bank/raw/.
+
+  # === Pohonne hmoty (zvycajne kazdy mesiac, konkretna stanica sa meni) ===
+  # Staci doklad z lubovolnej z tychto stanic. Doklad vystavuje
+  # prevadzkovatel stanice (napr. Janosik-NEA, BEDYMAR, HSV pre Shell,
+  # J&J Property Invest), nie znacka -> preto su uvedeni ako aliasy.
+  - slug: pohonne-hmoty
+    name: "Pohonne hmoty (Shell / OMV / Slovnaft)"
+    frequency: monthly
+    category: fuel
+    aliases: [shell, omv, slovnaft, janosik-nea, bedymar, hsv, j-j-property-invest, jj-property-invest]
+
+  # === Nepravidelne (missing nie je chyba) ===
   - slug: webglobe-yegon
     name: "Webglobe – Yegon, s.r.o."
-    frequency: monthly
+    frequency: irregular
     category: hosting
     aliases: [webglobe]
 
-  - slug: microsoft-ireland-operations
-    name: "Microsoft Ireland Operations Limited"
-    frequency: monthly
-    category: software
-    aliases: [microsoft, ms-365, microsoft-365]
-
-  - slug: google-cloud-emea
-    name: "Google Cloud EMEA Limited"
-    frequency: monthly
-    category: software
-    aliases: [google, google-workspace]
-
-  # === Energie ===
-  - slug: zsdis
-    name: "Západoslovenská distribučná, a.s."
-    frequency: monthly
-    category: energy
-
-  - slug: zse-energia
-    name: "ZSE Energia, a.s."
-    frequency: monthly
-    category: energy
-    aliases: [zse]
-
-  - slug: spp
-    name: "Slovenský plynárenský priemysel, a.s."
-    frequency: quarterly
-    months: [3, 6, 9, 12]
-    category: gas
-
-  # === Najom ===
-  - slug: prenajom-priestorov
-    name: "Prenajom kancelarskych priestorov"
-    frequency: monthly
-    category: rent
-    aliases: [prenajom, najomne]
-
-  # === Rocne predplatne ===
-  - slug: nay-elektronika
-    name: "NAY, a.s."
-    frequency: yearly
-    months: [1]
-    category: it-hardware
-    aliases: [nay]
-
-  # === Nepravidelne (informativne, missing nie je chyba) ===
-  - slug: revizia-vytahu
-    name: "Revizia vytahu / BOZP"
+  - slug: alza
+    name: "Alza.sk s.r.o."
     frequency: irregular
-    category: maintenance
+    category: retail

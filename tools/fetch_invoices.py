@@ -23,7 +23,7 @@ import json
 import os
 import re
 import sys
-from datetime import date
+from datetime import date, timedelta
 from email.header import decode_header
 from pathlib import Path
 
@@ -67,21 +67,21 @@ def decode_field(s):
     return "".join(out)
 
 
-def month_range(yyyy_mm):
-    """Search window for invoices.
+def month_range(yyyy_mm, until=None):
+    """Search window for documents.
 
-    Invoices for an accounting month often arrive late — vendors typically
-    issue them in the first half of the following month. Window goes from
-    1st of target month to 15th of the next month (inclusive of the 14th).
-    IMAP BEFORE is exclusive, so we pass day 15.
+    Starts on the 1st of the target month. Ends on `until` (inclusive),
+    which defaults to today — accounting docs (invoices, statements,
+    proformas) for a month keep arriving well into the following month,
+    so we scan up to the day the collection is run. IMAP BEFORE is
+    exclusive, so we pass until+1.
     """
     y, m = map(int, yyyy_mm.split("-"))
     first = date(y, m, 1)
-    if m == 12:
-        last = date(y + 1, 1, 15)
-    else:
-        last = date(y, m + 1, 15)
-    return imap_date(first), imap_date(last)
+    if until is None:
+        until = date.today()
+    before = until + timedelta(days=1)
+    return imap_date(first), imap_date(before)
 
 
 def matches_invoice(subject):
@@ -105,6 +105,15 @@ def main():
     ap.add_argument("--out", required=True, help="Output directory")
     ap.add_argument("--folder", default="INBOX",
                     help="IMAP folder (default INBOX)")
+    ap.add_argument("--until", default=None,
+                    help="Last day to scan, YYYY-MM-DD (default: today)")
+    ap.add_argument("--no-subject-filter", action="store_true",
+                    help="Download attachments from ALL messages, not just "
+                         "those whose subject looks invoice-like. Relevance "
+                         "is decided later by analysing attachment content.")
+    ap.add_argument("--all-ext", action="store_true",
+                    help="Accept any attachment extension (still skips inline "
+                         "logos/signatures and tiny files).")
     args = ap.parse_args()
 
     try:
@@ -129,7 +138,8 @@ def main():
         except (json.JSONDecodeError, KeyError):
             log = []
 
-    since, before = month_range(args.month)
+    until = date.fromisoformat(args.until) if args.until else None
+    since, before = month_range(args.month, until)
 
     M = imaplib.IMAP4_SSL(host, port)
     try:
@@ -166,7 +176,7 @@ def main():
             if not mid or mid in seen_ids:
                 continue
             subject = decode_field(msg.get("Subject", ""))
-            if not matches_invoice(subject):
+            if not args.no_subject_filter and not matches_invoice(subject):
                 continue
             considered_count += 1
             sender = decode_field(msg.get("From", ""))
@@ -183,7 +193,7 @@ def main():
                     continue
                 fn = decode_field(fn)
                 ext = os.path.splitext(fn)[1].lower()
-                if ext not in ALLOWED_EXT:
+                if not args.all_ext and ext not in ALLOWED_EXT:
                     continue
                 if IGNORE_NAMES_RE.search(fn):
                     continue

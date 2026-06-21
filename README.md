@@ -89,8 +89,8 @@ SMTP_USERNAME=ucto@mojafirma.sk
 SMTP_PASSWORD=app-specific-password-here
 
 # === Nextcloud ===
-NC_BASE_URL=https://cloud.mojafirma.sk
-NC_USERNAME=ucto
+NC_BASE_URL=https://www.spearo.eu/nextcloud
+NC_USERNAME=jd
 NC_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx-xxxx
 
 # === Lokalny drop folder ===
